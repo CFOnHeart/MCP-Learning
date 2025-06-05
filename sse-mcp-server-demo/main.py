@@ -1,9 +1,11 @@
 # sse_web_search.py
 import httpx
+import os
 
 from mcp.server import FastMCP
+from dotenv import load_dotenv
 
-
+load_dotenv()  # Load environment variables from .env
 app = FastMCP('web-search', port=9000)
 
 
@@ -18,10 +20,11 @@ async def web_search(query: str) -> str:
     Returns:
         搜索结果的总结
     """
+    api_key = os.getenv('BIGMODEL_API_KEY')
     async with httpx.AsyncClient() as client:
         response = await client.post(
             'https://open.bigmodel.cn/api/paas/v4/tools',
-            headers={'Authorization': '<Your api key>'},
+            headers={'Authorization': api_key},
             json={
                 'tool': 'web-search-pro',
                 'messages': [
