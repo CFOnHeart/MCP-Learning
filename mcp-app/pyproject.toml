@@ -1,0 +1,14 @@
+[project]
+name = "sse-mcp-server-demo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "dotenv>=0.9.9",
+    "fastapi>=0.115.12",
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.9.2",
+    "openai>=1.86.0",
+    "starlette>=0.46.2",
+]

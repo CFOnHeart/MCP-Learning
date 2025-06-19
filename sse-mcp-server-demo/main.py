@@ -6,10 +6,10 @@ from mcp.server import FastMCP
 from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env
-app = FastMCP('web-search', port=9000)
+mcp = FastMCP('web-search', port=9000)
 
 
-@app.tool()
+@mcp.tool()
 async def web_search(query: str) -> str:
     """
     搜索互联网内容
@@ -46,7 +46,7 @@ async def web_search(query: str) -> str:
         return '\n\n\n'.join(res_data)
 
 
-@app.tool()
+@mcp.tool()
 async def add(a: int, b: int) -> int:
     '''
     Add two numbers
@@ -54,4 +54,4 @@ async def add(a: int, b: int) -> int:
     return a+b
 
 if __name__ == "__main__":
-    app.run(transport='sse')
+    mcp.run(transport='sse')
