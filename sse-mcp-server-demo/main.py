@@ -47,11 +47,11 @@ async def web_search(query: str) -> str:
 
 
 @mcp.tool()
-async def add(a: int, b: int) -> int:
+async def add(num1: int, num2: int) -> int:
     '''
     Add two numbers
     '''
-    return a+b
+    return num1 + num2
 
 if __name__ == "__main__":
     mcp.run(transport='sse')
