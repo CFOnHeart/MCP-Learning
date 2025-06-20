@@ -21,25 +21,6 @@ class MCPClient:
         openai.api_key = os.getenv("OPENAI_API_KEY")
         self.openai_model = os.getenv("MODEL_NAME")
 
-    async def connect_to_sse_server(self, server_url: str):
-        """Connect to an MCP servers
-
-        Args:
-            :param server_url: remote api server with sse transport
-        """
-        from mcp.client.sse import sse_client
-
-        sse_transport = await self.exit_stack.enter_async_context(sse_client(server_url))
-        self.stdio, self.write = sse_transport
-        self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
-
-        await self.session.initialize()
-
-        # List available tools
-        response = await self.session.list_tools()
-        tools = response.tools
-        print("\nConnected to servers with tools:", [tool.name for tool in tools])
-
     async def connect_to_server(self, command: str, args: list[str]):
         """Connect to an MCP servers
 
@@ -142,15 +123,7 @@ class MCPClient:
 async def startup_stdio_client():
     client = MCPClient()
     try:
-        await client.connect_to_server("uv", ["run", "servers/math_server.py"])
-        await client.chat_loop()
-    finally:
-        await client.cleanup()
-
-async def startup_sse_client():
-    client = MCPClient()
-    try:
-        await client.connect_to_sse_server("http://127.0.0.1:9000/sse")
+        await client.connect_to_server("uv", ["run", "../servers/math_server.py"])
         await client.chat_loop()
     finally:
         await client.cleanup()
@@ -158,4 +131,3 @@ async def startup_sse_client():
 if __name__ == "__main__":
     import sys
     asyncio.run(startup_stdio_client())
-    # asyncio.run(startup_sse_client())
