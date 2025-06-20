@@ -25,18 +25,18 @@ def send():
     # 添加用户消息到上下文
     conversation_history.append({"role": "user", "content": user_message})
 
-    # 调用 OpenAI API
-    response = openai.ChatCompletion.create(
+    # 新版 openai 包的用法
+    response = openai.chat.completions.create(
         model="gpt-4",
         messages=conversation_history,
-        stream=True  # 启用流式响应
+        stream=True
     )
 
     def event_stream():
         try:
             for chunk in response:
-                if 'choices' in chunk and chunk['choices'][0].get('delta', {}).get('content'):
-                    content = chunk['choices'][0]['delta']['content']
+                if chunk.choices and chunk.choices[0].delta and getattr(chunk.choices[0].delta, "content", None):
+                    content = chunk.choices[0].delta.content
                     yield f"data: {content}\n\n"
                     time.sleep(0.01)
         except Exception as e:
@@ -49,7 +49,6 @@ def reset():
     global conversation_history
     conversation_history = []
     return jsonify({'status': 'reset'})
-
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)

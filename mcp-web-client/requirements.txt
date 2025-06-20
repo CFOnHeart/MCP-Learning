@@ -1,7 +1,0 @@
-aiohttp
-asyncio
-mcp
-requests
-flask
-flask-sse
-python-dotenv
